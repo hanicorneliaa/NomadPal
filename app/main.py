@@ -1,30 +1,46 @@
-# from fastapi import FastAPI
-import logging
-
-def set_logging(log_level):
-    logging.basicConfig(
-        format="[%(asctime)s.%(msecs)03d][%(levelname)s][%(filename)s:%(funcName)s():%(lineno)d] %(message)s",
-        level=log_level.upper(),
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-
-    logger = logging.getLogger(__name__)
-    return logger
-
-def get_system_prompt(use_case):
-    if use_case == "Student Tutor":
-        return "You are a math tutor."
-
-
+from fastapi import FastAPI
+from fastapi import BackgroundTasks
+from contextlib import asynccontextmanager
 from utils.ollama import LLMcaller
-model_id = "mistral"
-log_level = "DEBUG"
-use_case = "Student Tutor"
-localhost = "http://localhost:11434"
-logger = set_logging(log_level)
-system_prompt = get_system_prompt(use_case)
+from config.config import Settings, Request
+from utils.utils import set_logging
 
-llm = LLMcaller(model_id, system_prompt, logger, localhost)
-input = "Can you explain to me about pytaghoras theorem?"
 
-llm.infer(input)
+settings = Settings()
+logger = set_logging(settings.log_level)
+
+async def init_llm(app: FastAPI):
+    logger.info("Start llm api")
+    app.state.llm = LLMcaller(settings.model_id, logger, settings.llm_url)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("App starting up")
+    await init_llm(app)
+    # add more functionalities here later, ie database etc
+    yield
+    logger.info("App shutting down")
+    # clear up gracefully later
+
+app = FastAPI(lifespan=lifespan)
+
+@app.post(f"/infer")
+async def run_inference(request: Request):
+    try:
+        result = app.state.llm.infer(request.input, request.use_case)
+        return result
+    except Exception as e:
+        logger.error(f"Error during inference: {str(e)}")
+        return "Error during inference"
+
+
+'''
+#TODO:
+0. System prompt formulation
+1. FastAPI
+2. GUI
+3. Docker
+4. settings using env file
+5. Load previous results (database?)
+
+'''
