@@ -1,31 +1,35 @@
 # need access for huggingface, use ollama instead if no access
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from utils.utils import PromptSelector
 
 class LLMcaller():
-    def __init__(self, model_id, system_prompt, logger, max_new_tokens=1000, do_sample=True):
+    def __init__(self, model_id, use_case, logger, max_new_tokens=1000, do_sample=True):
 
         self.model_id = model_id
-        self.system_prompt = system_prompt
+        self.use_case =  use_case
         self.logger = logger
         self.max_new_tokens = max_new_tokens
         self.do_sample = do_sample
+        self.prompt_selector = PromptSelector()
 
         self.model = AutoModelForCausalLM.from_pretrained(self.model_id)
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_id)
         self.logger.info(f"Model `{self.model_id}` loaded.")
 
 
-    def infer(self, input):
-
-        model_input = self._preprocess_input(input)
+    def infer(self, input, use_case):
+        model_input = self._preprocess_input(input, use_case)
+        self.logger.debug(f"input: {model_input}")
         generated_ids = self.model.generate(model_input, max_new_tokens=1000, do_sample=True)
         output = self._postprocess_output(generated_ids)
-        self.logger.info(f"{output}")
+        self.logger.debug(f"Output: {output}")
+        return output
 
 
-    def _preprocess_input(self, input):
+    def _preprocess_input(self, input, use_case):
+        system_prompt = self.prompt_selector.get_system_prompt(use_case)
         messages = [
-            {"role": "user", "content": f"{self.system_prompt} \n{input}"}
+            {"role": "user", "content": f"{system_prompt} {input}"}
         ]
         encodeds = self.tokenizer.apply_chat_template(messages, return_tensors="pt")
         return encodeds
