@@ -32,15 +32,3 @@ async def run_inference(request: Request):
     except Exception as e:
         logger.error(f"Error during inference: {str(e)}")
         return "Error during inference"
-
-
-'''
-#TODO:
-0. System prompt formulation
-1. FastAPI
-2. GUI
-3. Docker
-4. settings using env file
-5. Load previous results (database?)
-
-'''

@@ -22,5 +22,7 @@ class PromptSelector:
         return self.prompt.keys()
 
     def get_system_prompt(self, use_case):
+        if use_case is None:
+            return ""
         return self.prompt.get(use_case)
 
