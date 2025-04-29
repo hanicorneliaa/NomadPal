@@ -1,9 +1,10 @@
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional
 
 class Settings(BaseSettings):
     inference: str = "ollama"
-    model_id: str = "mistral"
+    model_id: str = "llama3.2:1b"
     log_level: str = "DEBUG"
     llm_url: str = "http://localhost:11434"
 
@@ -16,4 +17,4 @@ class Settings(BaseSettings):
 
 class Request(BaseSettings):
     input: str
-    use_case: str
+    use_case: Optional[str] = None

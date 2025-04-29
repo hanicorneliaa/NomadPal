@@ -3,10 +3,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from utils.utils import PromptSelector
 
 class LLMcaller():
-    def __init__(self, model_id, use_case, logger, max_new_tokens=1000, do_sample=True):
+    def __init__(self, model_id, logger, max_new_tokens=1000, do_sample=True):
 
         self.model_id = model_id
-        self.use_case =  use_case
         self.logger = logger
         self.max_new_tokens = max_new_tokens
         self.do_sample = do_sample
