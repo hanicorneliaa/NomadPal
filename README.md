@@ -6,7 +6,7 @@ Helping remote students in low-connectivity areas access personalized, AI-powere
 
 ## 🛠️ Tools Used
 
-1. **[Ollama](https://ollama.com/)** – Local LLM model serving backend
+1. **[Ollama](https://ollama.com/)** / **[Hugging Face](https://huggingface.co/docs/transformers/en/model_doc/llama)** – Local LLM model serving backend
 2. **[Unsloth](https://github.com/unslothai/unsloth)** – LLM Model finetuning for specific tasks and domains
 3. **[FastAPI](https://fastapi.tiangolo.com/)** – High-performance backend API framework for serving model inference
 4. **[Gradio](https://gradio.app/)** – User-friendly graphical interface for interacting with the models
