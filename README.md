@@ -18,7 +18,7 @@ Helping remote students in low-connectivity areas access personalized, AI-powere
 ## 🚀 Features
 
 - Serve LLMs locally using Ollama
-- Model finetuned to adapt to specific tasks and domains using unsloth, trained on  **[mlabonne/FineTome-100k](https://github.com/artidoro/qlora)** dataset
+- Model finetuned to adapt to specific tasks and domains using unsloth, trained on  **[mlabonne/FineTome-100k](https://huggingface.co/datasets/mlabonne/FineTome-100k)** dataset
 - API access to model responses via FastAPI
 - Interactive UI for testing and experimentation using Gradio
 - Modular design for easy extensions
