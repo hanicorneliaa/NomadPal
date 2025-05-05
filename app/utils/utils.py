@@ -14,7 +14,7 @@ def set_logging(log_level):
 class PromptSelector:
     def __init__(self):
         self.prompt = {
-            "Student Tutor": "You are a math tutor.",
+            "Student Tutor": "You are a student tutor.",
             "Travel Assistant": "You are a travel expert."
         }
 

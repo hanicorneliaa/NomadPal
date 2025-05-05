@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi import BackgroundTasks
 from contextlib import asynccontextmanager
-from utils.ollama import LLMcaller
 from config.config import Settings, Request
 from utils.utils import set_logging
 
@@ -11,7 +10,14 @@ logger = set_logging(settings.log_level)
 
 async def init_llm(app: FastAPI):
     logger.info("Start llm api")
-    app.state.llm = LLMcaller(settings.model_id, logger, settings.llm_url)
+    if settings.inference == "ollama":
+        from utils.ollama import LLMcaller
+        app.state.llm = LLMcaller(settings.model_id, logger, settings.llm_url)
+    elif settings.inference == "huggingface":
+        from utils.hf import LLMcaller
+        app.state.llm = LLMcaller(settings.model_id, logger)
+    else:
+        raise Exception("Inference backend not supported")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
