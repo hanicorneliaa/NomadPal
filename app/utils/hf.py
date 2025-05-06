@@ -21,7 +21,6 @@ class LLMcaller():
 
     def infer(self, input, use_case):
         model_input = self._preprocess_input(input, use_case)
-        self.logger.debug(f"input: {self.full_prompt}")
         generated_ids = self.model.generate(**model_input, max_new_tokens=self.max_new_tokens, do_sample=self.do_sample)
         output = self._postprocess_output(generated_ids)
         self.logger.debug(f"Output: {output}")
