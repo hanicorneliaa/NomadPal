@@ -3,8 +3,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 class Settings(BaseSettings):
-    inference: str = "ollama" # "huggingface"
-    model_id: str = "llama-3-2-1b:finetuned-finetome-100k" # "llama3.2:1b"
+    inference: str = "ollama" # "huggingface" # "ollama"
+    model_id: str = "llama3.2:1b" # "llama-3-2-1b:finetuned-finetome-100k" # "llama3.2:1b"
     log_level: str = "DEBUG"
     llm_url: str = "http://localhost:11434"
 
